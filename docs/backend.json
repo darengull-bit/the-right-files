@@ -1,0 +1,417 @@
+{
+  "entities": {
+    "UserProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserProfile",
+      "type": "object",
+      "description": "Represents a user account within the Command Center application, storing personal details and linking to their subscription plan.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the UserProfile entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The full name of the user."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email address of the user, used for contact and potentially an external login system.",
+          "format": "email"
+        },
+        "subscriptionPlanId": {
+          "type": "string",
+          "description": "Reference to SubscriptionPlan. (Relationship: SubscriptionPlan 1:N UserProfile)"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the user profile was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the user profile was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "email",
+        "subscriptionPlanId"
+      ]
+    },
+    "SubscriptionPlan": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "SubscriptionPlan",
+      "type": "object",
+      "description": "Defines the different subscription tiers available in the application, outlining features and benefits.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the SubscriptionPlan entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the subscription plan (e.g., 'Free', 'Standard', 'Premium')."
+        },
+        "description": {
+          "type": "string",
+          "description": "A brief description of the subscription plan's features and benefits."
+        },
+        "features": {
+          "type": "array",
+          "description": "A list of distinct features included in this subscription plan.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description"
+      ]
+    },
+    "ClientProject": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ClientProject",
+      "type": "object",
+      "description": "Represents a client's project or website being tracked by the Command Center, encompassing all associated keywords and performance metrics.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the ClientProject entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The user-defined name for the client project (e.g., 'My Company Website', 'Client A's Local SEO')."
+        },
+        "url": {
+          "type": "string",
+          "description": "The primary URL associated with this client project, used for tracking and analysis.",
+          "format": "uri"
+        },
+        "ownerUserId": {
+          "type": "string",
+          "description": "Reference to UserProfile, indicating the user who owns or manages this project. (Relationship: UserProfile 1:N ClientProject)"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the client project was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the client project's details were last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "url",
+        "ownerUserId"
+      ]
+    },
+    "Keyword": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Keyword",
+      "type": "object",
+      "description": "Stores information about a specific keyword being tracked for a client project, including its term, search volume, and targeting details.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Keyword entity."
+        },
+        "term": {
+          "type": "string",
+          "description": "The specific keyword phrase being tracked (e.g., 'best pizza near me')."
+        },
+        "clientProjectId": {
+          "type": "string",
+          "description": "Reference to ClientProject. (Relationship: ClientProject 1:N Keyword)"
+        },
+        "initialSearchVolume": {
+          "type": "number",
+          "description": "The approximate monthly search volume for the keyword at the time it was added or last updated."
+        },
+        "targetLocation": {
+          "type": "string",
+          "description": "The geographical location for which the keyword's rank is primarily tracked (e.g., 'New York City', 'Global')."
+        },
+        "targetDevice": {
+          "type": "string",
+          "description": "The device type for which the keyword's rank is tracked (e.g., 'desktop', 'mobile')."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the keyword was added for tracking.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the keyword's properties (like search volume) were last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "term",
+        "clientProjectId",
+        "initialSearchVolume"
+      ]
+    },
+    "KeywordRankHistory": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "KeywordRankHistory",
+      "type": "object",
+      "description": "Records historical search engine ranking positions for a specific keyword at different points in time.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the KeywordRankHistory entity."
+        },
+        "keywordId": {
+          "type": "string",
+          "description": "Reference to Keyword. (Relationship: Keyword 1:N KeywordRankHistory)"
+        },
+        "date": {
+          "type": "string",
+          "description": "The specific date and time when the keyword rank was recorded.",
+          "format": "date-time"
+        },
+        "rank": {
+          "type": "number",
+          "description": "The organic search engine ranking position for the keyword at the recorded date."
+        }
+      },
+      "required": [
+        "id",
+        "keywordId",
+        "date",
+        "rank"
+      ]
+    },
+    "PerformanceMetricDefinition": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "PerformanceMetricDefinition",
+      "type": "object",
+      "description": "Defines the characteristics and meaning of different key performance metrics tracked within the application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the PerformanceMetricDefinition entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The descriptive name of the performance metric (e.g., 'Market Dominance', 'Map Pack Control', 'Indexed Listings', 'Revenue Impact')."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed explanation of what this metric measures and its significance."
+        },
+        "unit": {
+          "type": "string",
+          "description": "The unit of measurement for the metric (e.g., '%', '$', 'count', 'score')."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "unit"
+      ]
+    },
+    "MetricDataPoint": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "MetricDataPoint",
+      "type": "object",
+      "description": "Stores a single recorded value for a specific performance metric associated with a client project at a given time.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the MetricDataPoint entity."
+        },
+        "metricDefinitionId": {
+          "type": "string",
+          "description": "Reference to PerformanceMetricDefinition. (Relationship: PerformanceMetricDefinition 1:N MetricDataPoint)"
+        },
+        "clientProjectId": {
+          "type": "string",
+          "description": "Reference to ClientProject. (Relationship: ClientProject 1:N MetricDataPoint)"
+        },
+        "value": {
+          "type": "number",
+          "description": "The numerical value of the performance metric at the recorded date."
+        },
+        "date": {
+          "type": "string",
+          "description": "The specific date and time when the metric value was recorded.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "metricDefinitionId",
+        "clientProjectId",
+        "value",
+        "date"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "UserProfile",
+          "schema": {
+            "$ref": "#/backend/entities/UserProfile"
+          },
+          "description": "Stores individual user profiles. Access is strictly limited to the authenticated user whose `uid` matches `{userId}` in the path, making authorization explicit and independent. The `id` field within the document will match the `userId` path parameter.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user, corresponding to Firebase Authentication's `uid`."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/subscriptionPlans/{planId}",
+        "definition": {
+          "entityName": "SubscriptionPlan",
+          "schema": {
+            "$ref": "#/backend/entities/SubscriptionPlan"
+          },
+          "description": "Stores definitions of various subscription tiers. This collection is intended to be globally readable by all authenticated users, with write access typically restricted to administrators or automated backend processes. No specific authorization fields are needed at the document level for general reads.",
+          "params": [
+            {
+              "name": "planId",
+              "description": "The unique identifier for a specific subscription plan."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/performanceMetricDefinitions/{metricDefinitionId}",
+        "definition": {
+          "entityName": "PerformanceMetricDefinition",
+          "schema": {
+            "$ref": "#/backend/entities/PerformanceMetricDefinition"
+          },
+          "description": "Stores global definitions for different performance metrics. This collection is intended to be globally readable by all authenticated users, with write access typically restricted to administrators or automated backend processes. No specific authorization fields are needed at the document level for general reads.",
+          "params": [
+            {
+              "name": "metricDefinitionId",
+              "description": "The unique identifier for a specific performance metric definition."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/clientProjects/{projectId}",
+        "definition": {
+          "entityName": "ClientProject",
+          "schema": {
+            "$ref": "#/backend/entities/ClientProject"
+          },
+          "description": "Stores client projects. Each project is owned by the user specified by `userId` in the path. Access is restricted to `request.auth.uid == userId`. The `ownerUserId` field within the document explicitly confirms ownership and aligns with the path structure, supporting authorization independence for this level.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns this client project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique identifier for a specific client project."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/clientProjects/{projectId}/keywords/{keywordId}",
+        "definition": {
+          "entityName": "Keyword",
+          "schema": {
+            "$ref": "#/backend/entities/Keyword"
+          },
+          "description": "Stores keywords associated with a specific client project. Access is restricted to the owner of the parent `ClientProject`. For authorization independence, each document *must* include a denormalized `ownerUserId` field, copied from its parent `ClientProject`, allowing security rules to directly check `request.auth.uid == resource.data.ownerUserId`.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns the parent client project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique identifier of the parent client project."
+            },
+            {
+              "name": "keywordId",
+              "description": "The unique identifier for a specific keyword."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/clientProjects/{projectId}/keywords/{keywordId}/rankHistory/{rankHistoryId}",
+        "definition": {
+          "entityName": "KeywordRankHistory",
+          "schema": {
+            "$ref": "#/backend/entities/KeywordRankHistory"
+          },
+          "description": "Records historical search engine ranking positions for a specific keyword. Access is restricted to the owner of the grandparent `ClientProject`. For authorization independence, each document *must* include a denormalized `ownerUserId` field, copied from the grandparent `ClientProject`, allowing security rules to directly check `request.auth.uid == resource.data.ownerUserId`.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns the grandparent client project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique identifier of the grandparent client project."
+            },
+            {
+              "name": "keywordId",
+              "description": "The unique identifier of the parent keyword."
+            },
+            {
+              "name": "rankHistoryId",
+              "description": "The unique identifier for a specific keyword rank history entry."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/clientProjects/{projectId}/metricDataPoints/{metricDataPointId}",
+        "definition": {
+          "entityName": "MetricDataPoint",
+          "schema": {
+            "$ref": "#/backend/entities/MetricDataPoint"
+          },
+          "description": "Stores performance metric data points for a specific client project. Access is restricted to the owner of the parent `ClientProject`. For authorization independence, each document *must* include a denormalized `ownerUserId` field, copied from its parent `ClientProject`, allowing security rules to directly check `request.auth.uid == resource.data.ownerUserId`.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns the parent client project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique identifier of the parent client project."
+            },
+            {
+              "name": "metricDataPointId",
+              "description": "The unique identifier for a specific metric data point."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The recommended Firestore structure prioritizes Authorization Independence and robust QAPs (Query As Permission) through a combination of path-based ownership and strategic denormalization. All user-specific and user-owned data is organized under a top-level `/users/{userId}` collection, where `{userId}` directly corresponds to `request.auth.uid`. This ensures that any `list` operation initiated by an authenticated user automatically scopes the data to their owned resources, satisfying QAPs by making the `userId` explicit in the path. \n\nFor `ClientProject` entities, they are placed directly under a user's path: `/users/{userId}/clientProjects/{projectId}`. This establishes a clear 1:N relationship where the `ownerUserId` of the project is inherently the `userId` from the path. This allows for simple, performant security rules like `allow read, write: if request.auth.uid == userId;`.\n\nCritically, for all subcollections like `keywords` (e.g., `/users/{userId}/clientProjects/{projectId}/keywords/{keywordId}`), `rankHistory` (e.g., `/users/{userId}/clientProjects/{projectId}/keywords/{keywordId}/rankHistory/{rankHistoryId}`), and `metricDataPoints` (e.g., `/users/{userId}/clientProjects/{projectId}/metricDataPoints/{metricDataPointId}`), Authorization Independence is achieved by denormalizing the `ownerUserId` from the parent `ClientProject` into *every* document within these subcollections. This means each `Keyword`, `KeywordRankHistory`, and `MetricDataPoint` document will explicitly contain an `ownerUserId` field.\n\nThis denormalization is vital: it completely eliminates the need for `get()` calls in Firestore Security Rules to check parent document ownership. Rules can directly evaluate `allow read, write: if request.auth.uid == resource.data.ownerUserId;` for any document in these nested collections. This not only makes rules atomic and easier to debug but also fully supports QAPs for subcollection `list` operations, as the server can efficiently filter based on the `ownerUserId` field without needing to traverse the hierarchy.\n\nGlobal, read-only entities such as `SubscriptionPlan` and `PerformanceMetricDefinition` are stored in root-level collections (e.g., `/subscriptionPlans`, `/performanceMetricDefinitions`). These collections are designed for broad read access by all authenticated users, requiring minimal security rule complexity.\n\nThis structure ensures high security, scalability, and simplifies rule writing by making authorization context explicit at every document level that requires it, while leveraging Firestore's hierarchical nature for user-owned data."
+  }
+}

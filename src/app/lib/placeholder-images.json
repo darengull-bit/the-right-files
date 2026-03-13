@@ -1,0 +1,22 @@
+{
+  "placeholderImages": [
+    {
+      "id": "hero-matrix",
+      "description": "High-fidelity black and blue circuitry matrix background",
+      "imageUrl": "/hero-matrix.jpg",
+      "imageHint": "Matrix Circuitry"
+    },
+    {
+      "id": "founder-headshot",
+      "description": "Official Headshot of Founder Daren Gull",
+      "imageUrl": "/founder.jpg",
+      "imageHint": "Professional Founder"
+    },
+    {
+      "id": "app-logo",
+      "description": "Agent Pro SEO Official Logo Placeholder",
+      "imageUrl": "/logo.png",
+      "imageHint": "Professional Logo"
+    }
+  ]
+}

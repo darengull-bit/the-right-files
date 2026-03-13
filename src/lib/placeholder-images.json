@@ -1,0 +1,34 @@
+{
+  "placeholderImages": [
+    {
+      "id": "hero-bg",
+      "description": "High-tech matrix background with deep blues and digital patterns",
+      "imageUrl": "https://picsum.photos/seed/agentpro-matrix-bg-v2/1920/1080",
+      "imageHint": "Matrix Background"
+    },
+    {
+      "id": "feature-analytics",
+      "description": "Visual representation of search analytics and data trends",
+      "imageUrl": "https://picsum.photos/seed/agent-data/800/600",
+      "imageHint": "Search Data"
+    },
+    {
+      "id": "feature-ai",
+      "description": "Abstract visualization of AI processing and SEO audits",
+      "imageUrl": "https://picsum.photos/seed/agent-ai/800/600",
+      "imageHint": "AI Technology"
+    },
+    {
+      "id": "app-logo",
+      "description": "Agent Pro SEO Official Logo Placeholder",
+      "imageUrl": "/logo.png",
+      "imageHint": "Professional Logo"
+    },
+    {
+      "id": "demo-preview",
+      "description": "The exact glowing circuit matrix image for the hero section",
+      "imageUrl": "/hero-matrix.jpg",
+      "imageHint": "Matrix Circuitry"
+    }
+  ]
+}

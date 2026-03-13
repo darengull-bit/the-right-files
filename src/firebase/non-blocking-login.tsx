@@ -1,0 +1,32 @@
+'use client';
+import {
+  Auth,
+  signInAnonymously,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  UserCredential,
+} from 'firebase/auth';
+
+/** 
+ * Initiate anonymous sign-in. 
+ * Returns the promise so callers can handle rejections.
+ */
+export function initiateAnonymousSignIn(authInstance: Auth): Promise<UserCredential> {
+  return signInAnonymously(authInstance);
+}
+
+/** 
+ * Initiate email/password sign-up. 
+ * Returns the promise so callers can handle rejections (e.g. email in use).
+ */
+export function initiateEmailSignUp(authInstance: Auth, email: string, password: string): Promise<UserCredential> {
+  return createUserWithEmailAndPassword(authInstance, email, password);
+}
+
+/** 
+ * Initiate email/password sign-in. 
+ * Returns the promise so callers can handle rejections (e.g. invalid credentials).
+ */
+export function initiateEmailSignIn(authInstance: Auth, email: string, password: string): Promise<UserCredential> {
+  return signInWithEmailAndPassword(authInstance, email, password);
+}
