@@ -1,0 +1,49 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: keyword-check-trigger
+  labels:
+    app: agentpro
+    component: keyword-sync-job
+spec:
+  schedule: "0 3 * * *"  # Daily at 3 AM UTC (Fan-out handles daily/weekly logic)
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 7
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: agentpro
+            component: keyword-sync-job
+        spec:
+          containers:
+          - name: keyword-trigger
+            image: your-registry/agentpro:latest
+            imagePullPolicy: Always
+            command: ["npm", "run", "tsx", "src/scripts/keyword-check-trigger.ts"]
+            env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: agent-proseo-secrets
+                  key: DATABASE_URL
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: agent-proseo-secrets
+                  key: REDIS_URL
+            - name: SERP_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: agent-proseo-secrets
+                  key: SERP_API_KEY
+            resources:
+              limits:
+                cpu: "500m"
+                memory: "512Mi"
+              requests:
+                cpu: "250m"
+                memory: "256Mi"
+          restartPolicy: OnFailure

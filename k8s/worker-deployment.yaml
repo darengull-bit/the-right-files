@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agentpro-worker
+  labels:
+    app: agentpro
+    component: worker
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: agentpro
+      component: worker
+  template:
+    metadata:
+      labels:
+        app: agentpro
+        component: worker
+    spec:
+      containers:
+        - name: bullmq-worker
+          image: your-registry/agentpro:latest
+          # In Next.js standalone, the worker might need a custom entry point script
+          # or we run a dedicated worker pod that starts the genkit/background process
+          command: ["node", "src/ai/dev.ts"]
+          envFrom:
+            - secretRef:
+                name: agentpro-secrets
+            - configMapRef:
+                name: agentpro-config
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"

@@ -1,0 +1,52 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: daily-rankings
+  labels:
+    app: agentpro
+    component: ranking-job
+spec:
+  schedule: "0 2 * * *"  # Every day at 2 AM
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 7
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: agentpro
+            component: ranking-job
+        spec:
+          containers:
+          - name: ranking-worker
+            image: your-registry/agentpro:latest
+            imagePullPolicy: Always
+            command: ["npm", "run", "script:daily-rank"]
+            env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: agent-proseo-secrets
+                  key: DATABASE_URL
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: agent-proseo-secrets
+                  key: REDIS_URL
+            - name: LOG_FILE
+              value: /var/log/rankings.log
+            resources:
+              limits:
+                cpu: "500m"
+                memory: "512Mi"
+              requests:
+                cpu: "250m"
+                memory: "256Mi"
+            volumeMounts:
+            - name: log-volume
+              mountPath: /var/log
+          restartPolicy: OnFailure
+          volumes:
+          - name: log-volume
+            emptyDir: {}

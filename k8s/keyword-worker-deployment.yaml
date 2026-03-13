@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keyword-worker
+  labels:
+    app: agentpro
+    component: keyword-worker
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: agentpro
+      component: keyword-worker
+  template:
+    metadata:
+      labels:
+        app: agentpro
+        component: keyword-worker
+    spec:
+      containers:
+        - name: keyword-processor
+          image: your-registry/agentpro:latest
+          command: ["npm", "run", "worker"]
+          envFrom:
+            - secretRef:
+                name: agent-proseo-secrets
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          livenessProbe:
+            exec:
+              command:
+                - node
+                - -e
+                - "process.exit(0)"
+            initialDelaySeconds: 30
+            periodSeconds: 60
